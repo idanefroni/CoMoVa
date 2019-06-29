@@ -1,0 +1,4 @@
+cat `find  tmp -regex "tmp/${1}_${2}_${3}.*"` | sort -r > tmp/${1}_${2}_${3}_tmp
+head -1 tmp/${1}_${2}_${3}_tmp
+sed 1d tmp/${1}_${2}_${3}_tmp | sort 
+rm tmp/${1}_${2}_${3}_tmp

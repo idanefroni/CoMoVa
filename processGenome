@@ -1,0 +1,68 @@
+if [ "$#" -ne 1 ]; then
+	echo "Process Genome for CoMoVa"
+	echo "Syntax: processgenome genomename"
+	echo "genomename - a unique string found in the start of the genome, protein and gff3 files in the genomes directory"
+	exit
+fi
+
+cd genomes
+genome=`find ${1}*fa.gz -print`
+gff3=`find ${1}*gene.gff3 -print`
+proteins=`find ${1}*protein*.fa -print`
+
+printf "\nProcessing genome $1...\n\nLocated input files:\n"
+printf "Genome: $genome\n"
+printf "GFF3: $gff3\n"
+printf "Proteins: $proteins\n\n"
+
+printf "Sorting and filtering GFF3..."
+grep gene $gff3 | sort -k 1,1 -k 4,4n > ${gff3}.tmp
+mv $gff3 ${gff3}.old
+mv ${gff3}.tmp ${gff3}
+
+printf "Building promoter database..."
+
+if [ ! -f ${genome%.fa.gz}.upstream.fa ]; then
+	perl ../buildpromoterDB.perl $genome $gff3 3000 100 > ${genome%.fa.gz}.upstream.fa
+	printf "Done."
+else
+	printf "Skipped."
+fi
+cd ..
+
+printf "\n"
+
+printf "Build Blast database..."
+
+if [ ! -f blastdb/${proteins%_primaryTranscriptOnly.fa}.phr ]; then 
+	makeblastdb -in genomes/$proteins -input_type fasta -dbtype prot -parse_seqids -out blastdb/${proteins%_primaryTranscriptOnly.fa}
+	printf "Done."	
+else
+	printf "Skipped."
+fi
+printf "\n"
+
+printf "Reciprocal Blast A->B..."
+if [ ! -f orthologDB/${proteins%_primaryTranscriptOnly.fa}2ara.txt ]; then 
+	blastp -query genomes/$proteins -db blastdb/Athaliana_167_TAIR10.protein -out orthologDB/${proteins%_primaryTranscriptOnly.fa}2ara.txt -evalue 1E-10 -outfmt 6 -num_alignments 4 -num_threads 16
+	printf "Done."	
+else
+	printf "Skipped."
+fi
+printf "\n"
+
+printf "Reciprocal Blast B->A..."
+
+if [ ! -f orthologDB/ara2${proteins%_primaryTranscriptOnly.fa}.txt ]; then
+	blastp -query genomes/Athaliana_167_TAIR10.protein_primaryTranscriptOnly.fa -db blastdb/${2%_primaryTranscriptOnly.fa} -out orthologDB/ara2${proteins%_primaryTranscriptOnly.fa}.txt -evalue 1E-10 -outfmt 6 -num_alignments 4 -num_threads 16
+	printf "Done."	
+else
+	printf "Skipped."
+fi
+printf "\n"
+
+printf "Build ortholog database..."
+Rscript --vanilla buildOrthologDB.r ${proteins%_primaryTranscriptOnly.fa}
+
+echo "Done processing genome."
+

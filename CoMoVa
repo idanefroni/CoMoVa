@@ -1,0 +1,53 @@
+if [ "$#" -ne 2 ]; then
+        echo "Compute conservation for motif"
+        echo "Syntax: CoMoVa motifname promoterlength"
+        exit
+fi
+
+motif=${1}
+background=${1}background
+promoterlength=$2
+
+printf "Starting conservation analysis for motif $1..."
+
+Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 1 1000 &
+Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 1001 2000 & 
+Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 2001 4000 &
+Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 4001 6000 &
+Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 6001 8000 &
+Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 8001 10000&
+Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 10001 12000 &
+Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 12001 14000 &
+Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 14001 16000 &
+Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 16001 18000 &
+Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 18001 20000 &
+Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 20001 22000 &
+Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 22001 24000 &
+Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 24001 25000 &
+wait
+
+./collectcsv angio $motif $promoterlength > REDB/${1}/angio_$motif_$promoterlength.csv
+./collectcsv dicots $motif $promoterlength > REDB/${1}/dicots_$motif_$promoterlength.csv
+./collectcsv monocots $motif $promoterlength > REDB/${1}/monocots_$motif_$promoterlength.csv
+./collectcsv bra $motif $promoterlength > REDB/${1}/bra_$motif_$promoterlength.csv
+
+Rscript --vanilla buildConservationMatrix.r $background $promoterlength 1 1000 &
+Rscript --vanilla buildConservationMatrix.r $background $promoterlength 1001 2000 & 
+Rscript --vanilla buildConservationMatrix.r $background $promoterlength 2001 4000 &
+Rscript --vanilla buildConservationMatrix.r $background $promoterlength 4001 6000 &
+Rscript --vanilla buildConservationMatrix.r $background $promoterlength 6001 8000 &
+Rscript --vanilla buildConservationMatrix.r $background $promoterlength 8001 10000 &
+Rscript --vanilla buildConservationMatrix.r $background $promoterlength 10001 12000 &
+Rscript --vanilla buildConservationMatrix.r $background $promoterlength 12001 14000 &
+Rscript --vanilla buildConservationMatrix.r $background $promoterlength 14001 16000 &
+Rscript --vanilla buildConservationMatrix.r $background $promoterlength 16001 18000 &
+Rscript --vanilla buildConservationMatrix.r $background $promoterlength 18001 20000 &
+Rscript --vanilla buildConservationMatrix.r $background $promoterlength 20001 22000 &
+Rscript --vanilla buildConservationMatrix.r $background $promoterlength 22001 24000 &
+Rscript --vanilla buildConservationMatrix.r $background $promoterlength 24001 25000 &
+wait
+
+./collectcsv angio $background $promoterlength > REDB/$background/angio_$background_$promoterlength.csv
+./collectcsv dicots $background $promoterlength > REDB/$background/dicots_$background_$promoterlength.csv
+./collectcsv monocots $background $promoterlength > REDB/$background/monocots_$background_$promoterlength.csv
+./collectcsv bra $background $promoterlength > REDB/$background/bra_$background_$promoterlength.csv

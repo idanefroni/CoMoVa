@@ -1,0 +1,38 @@
+if [ "$#" -ne 1 ]; then
+	echo "Process Motifs for CoMoVa"
+	echo "Syntax: processmotif motifname"
+	exit
+fi
+
+cd motifs
+motiffile=${1}.fasta
+backgroundfile=${1}background.fasta
+
+printf "\nProcessing motif $1...\n\nInput files:\n"
+printf "Motif file: $motiffile\n"
+printf "Background file: $backgroundfile\n"
+cd ..
+
+mkdir -p REDB/${1}
+mkdir -p REDB/${1}background
+
+printf "Building Response Element database..."
+
+for f in genomes/*.upstream.fa;
+do
+   trimf=${f#genomes/}
+   trimb=${trimf%.upstream.fa}
+
+   perl buildREDB.perl $f motifs/${motiffile} > REDB/${1}/${trimb}.re.txt 
+   perl buildREDB.perl $f motifs/${backgroundfile} > REDB/${1}background/${trimb}.re.txt 
+   printf "."
+done
+
+printf "Done.\n"
+
+printf "Processing Response Element database..."
+
+Rscript --vanilla buildMotifDB.r ${1}
+
+echo "Done processing motif"
+

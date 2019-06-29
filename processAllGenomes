@@ -1,0 +1,8 @@
+for f in genomes/*.fa.gz;
+do
+   trimf=${f#*genomes/}
+   trimb=${trimf%%_*};
+   ./processGenome ${trimb}
+done
+
+   

@@ -54,7 +54,7 @@ printf "\n"
 printf "Reciprocal Blast B->A..."
 
 if [ ! -f orthologDB/ara2${proteins%_primaryTranscriptOnly.fa}.txt ]; then
-	blastp -query genomes/Athaliana_167_TAIR10.protein_primaryTranscriptOnly.fa -db blastdb/${2%_primaryTranscriptOnly.fa} -out orthologDB/ara2${proteins%_primaryTranscriptOnly.fa}.txt -evalue 1E-10 -outfmt 6 -num_alignments 4 -num_threads 16
+	blastp -query genomes/Athaliana_167_TAIR10.protein_primaryTranscriptOnly.fa -db blastdb/${proteins%_primaryTranscriptOnly.fa} -out orthologDB/ara2${proteins%_primaryTranscriptOnly.fa}.txt -evalue 1E-10 -outfmt 6 -num_alignments 4 -num_threads 16
 	printf "Done."	
 else
 	printf "Skipped."

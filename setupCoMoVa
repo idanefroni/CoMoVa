@@ -1,0 +1,14 @@
+################################################
+######### Build directory structure for CoMoVa
+
+mkdir -p tmp
+mkdir -p blastdb
+mkdir -p logs
+mkdir -p orthologDB
+mkdir -p REDB
+
+chmod +x collectcsv
+chmod +x CoMoVa
+chmod +x processAllGenomes
+chmod +x processGenome
+chmod +x processMotif

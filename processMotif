@@ -1,6 +1,6 @@
 if [ "$#" -ne 1 ]; then
 	echo "Process Motifs for CoMoVa"
-	echo "Syntax: processmotif motifname"
+	echo "Syntax: processMotif motifname"
 	exit
 fi
 

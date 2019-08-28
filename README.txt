@@ -68,12 +68,65 @@ Once the genomes and motif database is setup, we calculate motif conservation:
 This script may take a considerable amount of time which depends on how common is the motif. Computing conservation for the auxRE
 for 45 genomes using a 16 core Xeon 2.4GHz took ~24 hours. This will generate a conservation database for the response element. 
 
-The database is loaded in R using the loadcontable function in the CoMoVa.r file. see the R file for more info.
+
+##############################################################
+##### Data analysis
+
+The scripts for data analysis are written in R. All basic functions are in the CoMoVa.r file.
+
+Sample analysis R code:
+
+# Loads CoMoVa and basic databases
+source("CoMoVa_analysis.r")
+
+
+# loading a particular RE database (replace "auxRE" with the particular RE in interest)
+# first, load the background database and the motif conservation database
+
+auxbackground <- loadcontable("auxREbackground", length=1000)
+aux <- loadcontable("auxRE", length=1000, background=auxREbackground)
+
+# To get the significantly conserved genes, first, determine the appropriate cutoff
+#  the cutoff is determined based on the specific background distribution. It can (and should) be twicked manually.
+
+cutoff = getSuggestedCutoff(auxbackground$angio_pval)
+
+# Then, plot the conservation heatmap (similar to Fig 2A in the paper)
+
+aux_cons_matrix = PlotConHM(aux$angio_pval, cutoff=cutoff, returnMatrix=TRUE, plotHM=TRUE)
+
+# aux_cons_matrix will contain a matrix, where the rows are genes and columns motif variants. Values are the conservation p-values.
+
+# Alternative analysis options
+#
+# * To analyze the raw conservation scores (instead of pval) use aux$angio instead of aux$angio_pval
+#
+# * To analysis just a subset of the tree use aux$dicots_pval, aux$monocots_pval or bra_pval (for Brasicacea). 
+#
+# * To return an annotated table having gene names (instead of locus ID), use annotate=TRUE in PlotConHM
+#
+
+
+
+# To plot the PWM for particular motifs (Fig 5):
+# First, load the raw variant data
+
+load("REDB\auxRE.data")
+
+# Then compute PWM for a give locus (example is for IAA2)
+
+PlotPWMforMotif(redb= auxRE, locus = "AT3G23030", motif="CC")
+
+
+
+
 
 ###############################################
 ### Version tracking
 
 ## V0.01 - First upload
+## V0.02 - Added analysis functions
+
 
 
 

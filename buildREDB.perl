@@ -3,7 +3,7 @@ use strict;
 $|=1;
 
 if( @ARGV < 2) {
-   print "makeAuxREDB <PromoterFasta> <MotifsFasta>\n";
+   print "buildREDB <PromoterFasta> <MotifsFasta>\n";
    exit();
 }
 open UP1KB, $ARGV[0];
@@ -35,34 +35,35 @@ while(my $line = <PLACE>) {
    $seq = <PLACE>;
 
    chomp($line);
+   if(substr($line,0,1) eq '>') {
 
-   $line = substr($line,1);
+   	$line = substr($line,1);
 
-   $seq =~s/\n//;
-   push(@motifshort, $line);
-   push(@motifname, $seq);
+   	$seq =~s/\n//;
+   	push(@motifshort, $line);
+   	push(@motifname, $seq);
 
-   $seq =~s/N/[A|C|G|T]/g;
-   $seq =~s/X/[A|C|G|T]/g;
-   $seq =~s/W/[A|T]/g;
-   $seq =~s/R/[A|G]/g;
-   $seq =~s/Y/[C|T]/g;
-   $seq =~s/M/[A|C]/g;
-   $seq =~s/S/[G|C]/g;
-   $seq =~s/s/[G|C]/g;
-   $seq =~s/K/[G|T]/g;
-   $seq =~s/H/[A|C|T]/g;
-   $seq =~s/V/[A|C|G]/g;
-   $seq =~s/h/[A|C|T]/g;
-   $seq =~s/D/[A|G|T]/g;
-   $seq =~s/B/[C|G|T]/g;
+   	$seq =~s/N/[A|C|G|T]/g;
+   	$seq =~s/X/[A|C|G|T]/g;
+   	$seq =~s/W/[A|T]/g;
+   	$seq =~s/R/[A|G]/g;
+   	$seq =~s/Y/[C|T]/g;
+   	$seq =~s/M/[A|C]/g;
+   	$seq =~s/S/[G|C]/g;
+   	$seq =~s/s/[G|C]/g;
+   	$seq =~s/K/[G|T]/g;
+   	$seq =~s/H/[A|C|T]/g;
+   	$seq =~s/V/[A|C|G]/g;
+   	$seq =~s/h/[A|C|T]/g;
+   	$seq =~s/D/[A|G|T]/g;
+   	$seq =~s/B/[C|G|T]/g;
  
-   push(@motifs, $seq);
-   $i++;
+   	push(@motifs, $seq);
+   	$i++;
+   }
 }
 
 close(PLACE);
-
 #read seqeunce
 
 print "Locus,Motif,Variant,Context,Pos,Rev,Region\n";

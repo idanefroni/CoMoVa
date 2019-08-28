@@ -1,0 +1,27 @@
+if [ "$#" -ne 1 ]; then
+	echo "Delete motif from CoMoVa database"
+	echo "Syntax: deleteMotif motifname"
+	exit
+fi
+
+cd motifs
+motiffile=${1}.fasta
+backgroundfile=${1}background.fasta
+
+printf "\nProcessing motif $1...\n\nInput files:\n"
+printf "Motif file: $motiffile\n"
+printf "Background file: $backgroundfile\n"
+cd ..
+
+rm ./REDB/${1}/*
+rm ./REDB/${1}background/*
+
+rmdir REDB/${1}
+rmdir REDB/${1}background
+
+rm ${1}.data
+rm ${1}background.data
+rm ${1}.small
+
+echo "Done deleting motif"
+

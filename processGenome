@@ -10,6 +10,12 @@ genome=`find ${1}*fa.gz -print`
 gff3=`find ${1}*gene.gff3 -print`
 proteins=`find ${1}*protein*.fa -print`
 
+if [ "$genome" == "" ] || [ "$gff3" == "" ] || [ "$proteins" == "" ]; then
+	echo "Aborting. Genome files are not found. Does the genome ${1} exists in the genomes directory?"
+	cd ..
+	exit
+fi
+
 printf "\nProcessing genome $1...\n\nLocated input files:\n"
 printf "Genome: $genome\n"
 printf "GFF3: $gff3\n"
@@ -55,14 +61,4 @@ printf "Reciprocal Blast B->A..."
 
 if [ ! -f orthologDB/ara2${proteins%_primaryTranscriptOnly.fa}.txt ]; then
 	blastp -query genomes/Athaliana_167_TAIR10.protein_primaryTranscriptOnly.fa -db blastdb/${proteins%_primaryTranscriptOnly.fa} -out orthologDB/ara2${proteins%_primaryTranscriptOnly.fa}.txt -evalue 1E-10 -outfmt 6 -num_alignments 4 -num_threads 16
-	printf "Done."	
-else
-	printf "Skipped."
-fi
-printf "\n"
-
-printf "Build ortholog database..."
-Rscript --vanilla buildOrthologDB.r ${proteins%_primaryTranscriptOnly.fa}
-
-echo "Done processing genome."
-
+	printf 

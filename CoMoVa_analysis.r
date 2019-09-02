@@ -107,7 +107,6 @@ PlotConHM <- function(pval, cutoff=30, minvalue = 10, maxval=30, trim= FALSE, re
   
   if(trim) {
     pval_sel = pval_sel[, apply(pval_sel, 2, max)>=cutoff]
-    order_col = intersect(order_col, colnames(pval_sel))
   }  
   pvalfil = pval_sel
   pvalfil[pvalfil<cutoff]=0

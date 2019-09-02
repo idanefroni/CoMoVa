@@ -23,13 +23,16 @@ Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 16001 18000 &
 Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 18001 20000 &
 Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 20001 22000 &
 Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 22001 24000 &
-Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 24001 25000 &
+Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 24001 26000 &
+Rscript --vanilla buildConservationMatrix.r $motif $promoterlength 26001 27400 &
 wait
 
 ./collectcsv angio $motif $promoterlength > REDB/${1}/angio_$motif_$promoterlength.csv
 ./collectcsv dicots $motif $promoterlength > REDB/${1}/dicots_$motif_$promoterlength.csv
 ./collectcsv monocots $motif $promoterlength > REDB/${1}/monocots_$motif_$promoterlength.csv
 ./collectcsv bra $motif $promoterlength > REDB/${1}/bra_$motif_$promoterlength.csv
+
+rm ./tmp/*_${motif}_*.csv
 
 Rscript --vanilla buildConservationMatrix.r $background $promoterlength 1 1000 &
 Rscript --vanilla buildConservationMatrix.r $background $promoterlength 1001 2000 & 
@@ -44,10 +47,13 @@ Rscript --vanilla buildConservationMatrix.r $background $promoterlength 16001 18
 Rscript --vanilla buildConservationMatrix.r $background $promoterlength 18001 20000 &
 Rscript --vanilla buildConservationMatrix.r $background $promoterlength 20001 22000 &
 Rscript --vanilla buildConservationMatrix.r $background $promoterlength 22001 24000 &
-Rscript --vanilla buildConservationMatrix.r $background $promoterlength 24001 25000 &
-wait
+Rscript --vanilla buildConservationMatrix.r $background $promoterlength 24001 26000 &
+Rscript --vanilla buildConservationMatrix.r $background $promoterlength 26001 27400 &
 
+wait
 ./collectcsv angio $background $promoterlength > REDB/$background/angio_$background_$promoterlength.csv
 ./collectcsv dicots $background $promoterlength > REDB/$background/dicots_$background_$promoterlength.csv
 ./collectcsv monocots $background $promoterlength > REDB/$background/monocots_$background_$promoterlength.csv
 ./collectcsv bra $background $promoterlength > REDB/$background/bra_$background_$promoterlength.csv
+rm ./tmp/*_${background}_*.csv
+

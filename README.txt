@@ -30,13 +30,14 @@ Athaliana_167_TAIR10.fa.gz
 Athaliana_167_TAIR10.gene.gff3
 Athaliana_167_TAIR10.protein_primaryTranscriptOnly.fa
 
-The github distribution already has the Arabidopsis genome in the directory.
+The github distribution already has the Arabidopsis genome in the directory. The entire complication of 45 genomes used in the paper can be downloaded
+from the following link: https://drive.google.com/file/d/1_Sn8gi87xqNs4HmAU8kGsxCgO30j4RLO/view?usp=sharing (ZIP file, 7.4Gb)
 
-Following obtaining the files, the genome has to be processed and orthology determined. This is done with the processGenome script
+Following obtaining the files, each genome has to be processed and orthology determined. This is done with the processGenome script
 
 ./processGenome <GenomeName>
 
-Depending on your computing power, this can take a couple of minutes to an hour to complete for each genome. You can also run it as 
+Depending on the number of availalble CPUs, this can take a couple of hours to complete for each genome. You can also run it as 
 a batch for multiple genome using the processAllGenomes script.
 
 The script will generate for each genome, a blast database in the blastdb directory, a promoter sequence file in the genome directory names

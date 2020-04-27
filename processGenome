@@ -50,7 +50,7 @@ printf "\n"
 
 printf "Reciprocal Blast A->B..."
 if [ ! -f orthologDB/${proteins%_primaryTranscriptOnly.fa}2ara.txt ]; then 
-	blastp -query genomes/$proteins -db blastdb/Athaliana_167_TAIR10.protein -out orthologDB/${proteins%_primaryTranscriptOnly.fa}2ara.txt -evalue 1E-10 -outfmt 6 -num_alignments 4 -num_threads 16
+	blastp -query genomes/$proteins -db blastdb/Athaliana_167_TAIR10.protein -evalue 1E-10 -outfmt 6 -num_threads 16 | sort -g -k1,1 -k11,11 > orthologDB/${proteins%_primaryTranscriptOnly.fa}2ara.txt
 	printf "Done."	
 else
 	printf "Skipped."
@@ -60,5 +60,15 @@ printf "\n"
 printf "Reciprocal Blast B->A..."
 
 if [ ! -f orthologDB/ara2${proteins%_primaryTranscriptOnly.fa}.txt ]; then
-	blastp -query genomes/Athaliana_167_TAIR10.protein_primaryTranscriptOnly.fa -db blastdb/${proteins%_primaryTranscriptOnly.fa} -out orthologDB/ara2${proteins%_primaryTranscriptOnly.fa}.txt -evalue 1E-10 -outfmt 6 -num_alignments 4 -num_threads 16
-	printf 
+	blastp -query genomes/Athaliana_167_TAIR10.protein_primaryTranscriptOnly.fa -db blastdb/${proteins%_primaryTranscriptOnly.fa} -evalue 1E-10 -outfmt 6 -num_threads 16 | sort -g -k1,1 -k11,11 > orthologDB/ara2${proteins%_primaryTranscriptOnly.fa}.txt
+	printf "Done."	
+else
+	printf "Skipped."
+fi
+printf "\n"
+
+printf "Build ortholog database..."
+Rscript --vanilla buildOrthologDB.r ${proteins%_primaryTranscriptOnly.fa}
+
+echo "Done processing genome."
+
